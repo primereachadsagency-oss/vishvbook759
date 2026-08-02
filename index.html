@@ -139,22 +139,6 @@
       margin-bottom: 24px;
     }
 
-    /* Redirect Banner Banner */
-    .redirect-banner {
-      background: #fef3c7;
-      color: #92400e;
-      border: 1px solid #fde68a;
-      padding: 10px 16px;
-      border-radius: 12px;
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
     /* Button Styling */
     .btn-container {
       margin-bottom: 8px;
@@ -341,11 +325,6 @@ src="https://www.facebook.com/tr?id=1402127488515735&ev=PageView&noscript=1"
     <!-- Hero Section -->
     <section class="hero">
       <div class="badge">📊 15+ Years Experience</div>
-      
-      <!-- Auto Redirect Countdown Display -->
-      <div class="redirect-banner">
-        ⏳ Auto Redirecting in <span id="countdown">10</span> seconds...
-      </div>
 
       <h1>Work From Home<br><span>Writing Jobs 💸🏆</span></h1>
       <p class="hero-p">
@@ -417,7 +396,6 @@ src="https://www.facebook.com/tr?id=1402127488515735&ev=PageView&noscript=1"
 
     <!-- Footer -->
     <footer>
-  
       <div class="footer-links">
         <a href="#">Privacy Policy</a>
         <span>|</span>
@@ -433,63 +411,32 @@ src="https://www.facebook.com/tr?id=1402127488515735&ev=PageView&noscript=1"
   <!-- Scripts -->
   <script>
     document.addEventListener("DOMContentLoaded", function() {
-      const targetUrl = "https://t.me/+fMBZi6cpwQg5NjY1";
-
-      // 1. Function to trigger subscriber tracking events
-      function triggerSubscriberEvents(eventType) {
-        // Meta (Facebook) Pixel Tracking
-        if (typeof fbq !== "undefined") {
-          fbq('track', 'Subscribe', { type: eventType });
-          fbq('track', 'Lead', { type: eventType });
-        }
-        
-        // Google Analytics (gtag.js) Tracking
-        if (typeof gtag !== "undefined") {
-          gtag('event', 'subscribe', {
-            'event_category': 'Telegram',
-            'event_label': eventType === 'auto_redirect' ? 'Auto Redirect Join' : 'Join Telegram Click'
-          });
-        }
-
-        // Google Tag Manager (dataLayer) Tracking
-        if (window.dataLayer) {
-          window.dataLayer.push({
-            'event': 'subscriber_click',
-            'redirect_type': eventType
-          });
-        }
-      }
-
-      // 2. Manual Click Event Tracking Setup (For Buttons Only)
+      // Manual Click Event Tracking Setup (For Buttons Only)
       const buttons = document.querySelectorAll(".track-subscriber");
       buttons.forEach(function(button) {
         button.addEventListener("click", function() {
-          triggerSubscriberEvents('manual_click');
+          // Meta (Facebook) Pixel Tracking
+          if (typeof fbq !== "undefined") {
+            fbq('track', 'Subscribe');
+            fbq('track', 'Lead');
+          }
+          
+          // Google Analytics (gtag.js) Tracking
+          if (typeof gtag !== "undefined") {
+            gtag('event', 'subscribe', {
+              'event_category': 'Telegram',
+              'event_label': 'Join Telegram Click'
+            });
+          }
+
+          // Google Tag Manager (dataLayer) Tracking
+          if (window.dataLayer) {
+            window.dataLayer.push({
+              'event': 'subscriber_click'
+            });
+          }
         });
       });
-
-      // 3. Tracked 10-Second Auto-Redirect Setup (With Real-Time Subscriber Event)
-      let secondsLeft = 10;
-      const countdownElement = document.getElementById("countdown");
-
-      const timer = setInterval(function() {
-        secondsLeft--;
-        if (countdownElement) {
-          countdownElement.textContent = secondsLeft;
-        }
-
-        if (secondsLeft <= 0) {
-          clearInterval(timer);
-          
-          // Trigger tracking events right before redirecting
-          triggerSubscriberEvents('auto_redirect');
-
-          // Short delay to allow tracking pixels to send data completely
-          setTimeout(function() {
-            window.location.href = targetUrl;
-          }, 200);
-        }
-      }, 1000);
     });
   </script>
 
